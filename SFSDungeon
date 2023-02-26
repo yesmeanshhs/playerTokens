@@ -1,0 +1,124 @@
+local http = game:GetService("HttpService")
+local a = game:HttpGet("https://raw.githubusercontent.com/LeymansGuz/playerTokens/main/SwordFighterSimulatorLeaderboard.txt")
+a = http:JSONDecode(a)
+local found = false
+local servercount = 0
+local cursor,servers
+local id = {}
+local json = {}
+local images = {}
+
+function server()
+    local link = "https://games.roblox.com/v1/games/11040063484/servers/0?excludeFullGames=false&limit=100"
+    if cursor then
+        link = link.."&cursor="..cursor
+        page = syn.request({["Url"] = link,["Method"] = "GET"})
+        page = http:JSONDecode(page.Body)
+        cursor = page.nextPageCursor
+        page = page.data
+        for i,v in pairs(page) do
+            for i2,v2 in pairs(v.playerTokens) do
+                table.insert(id,{v2,v.id,v.playing})
+            end
+        end
+    else
+        page = syn.request({["Url"] = link,["Method"] = "GET"})
+        page = http:JSONDecode(page.Body)
+        cursor = page.nextPageCursor
+        page = page.data
+        for i,v in pairs(page) do
+            for i2,v2 in pairs(v.playerTokens) do
+                table.insert(id,{v2,v.id,v.playing})
+            end
+        end
+    end
+end
+
+function split(t)
+    local count = 0 
+    for i,v in pairs(t) do
+        count = count+1
+    end
+    local tables = {}
+    for i = 1,math.ceil(count/100) do
+        tables[i] = {}
+        for e=i*100-99,i*100 do
+            if t[e] then
+                table.insert(tables[i],t[e])
+            end
+        end
+    end
+    return tables
+end
+
+function checktokens(tokens)
+local payload = {
+       Url = "https://thumbnails.roblox.com/v1/batch",
+       Headers = {
+           ["Content-Type"] = "application/json"
+       },
+       Method = "POST",
+
+       Body = {}
+   }
+   
+for i,v in pairs(tokens) do
+       table.insert(payload.Body, {
+           requestId = "0:"..v[1]..":AvatarHeadshot:150x150:png:regular",
+           type = "AvatarHeadShot",
+           targetId = 0,
+           token = v[1],
+           format = "png",
+           size = "150x150"
+       })
+end
+payload.Body = http:JSONEncode(payload.Body)
+local result = syn.request(payload)
+table.insert(json,http:JSONDecode(result.Body).data)
+end
+
+repeat 
+    servercount = servercount + 1 
+    server() 
+    print("Checking servers "..servercount) 
+until cursor == nil
+print("Server check ended")
+
+for i,v in pairs(split(id)) do
+spawn(function()
+checktokens(v)
+end)
+end
+print("Sending JSON...")
+
+repeat game.RunService.RenderStepped:Wait() until #split(id) == #json
+
+for i,v in pairs(a) do
+    for i2,v2 in pairs(json) do
+        for i3,v3 in pairs(v2) do
+            if v3.imageUrl == v then
+                for i4,v4 in pairs(id) do
+                    if v4[1] == string.sub(v3.requestId,3,#v3.requestId-35) then
+                        if v4[3] < 12 then
+                            servers = {v4[2],i}
+                            found = true
+                        end
+                        if found then break end
+                    end
+                    if found then break end
+                end
+                if found then break end
+            end
+            if found then break end
+        end
+        if found then break end
+    end
+    if found then break end
+end
+
+if servers then
+    print("Teleporting to World Top "..servers[2])
+    game:GetService("TeleportService"):TeleportToPlaceInstance(11040063484,servers[1])
+else
+    print("All leaderboard players not found")
+end
