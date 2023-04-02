@@ -91,9 +91,9 @@ function json()
                 table.insert(_G.playertoken,_G.token[i])
                 table.remove(_G.token,i)
             end
-            physics = checktokens(tab)
-            if physics then
-            for i,v in pairs(physics) do
+            leymans = checktokens(tab)
+            if leymans then
+            for i,v in pairs(leymans) do
             if v.imageUrl == _G.image then
                 id = string.sub(v.requestId,3,#v.requestId-35)
                 for a,b in pairs(_G.playertoken) do
@@ -118,9 +118,9 @@ function json()
                 table.insert(_G.playertoken,_G.token[i])
                 table.remove(_G.token,i)
             end
-            hksb = checktokens(tab2)
-            if hksb then
-            for i,v in pairs(hksb) do
+            video = checktokens(tab2)
+            if video then
+            for i,v in pairs(video) do
             if v.imageUrl == _G.image then
                 id = string.sub(v.requestId,3,#v.requestId-35)
                 for a,b in pairs(_G.playertoken) do
