@@ -70,46 +70,6 @@ if not game.CoreGui:FindFirstChild("StreamSniper") then
                     return tostring(math.floor(num * 100 + 0.5) / 100)
                 end
 
-                function webhook(playertoken)
-                    local OSTime = os.time()
-                    local Time = os.date("!*t", OSTime)
-                    local Embed = {
-                        title = _G.plrname,
-                        color = "287154",
-                        footer = {text = "Youtuber Logging Service"},
-                        author = {
-                            name = "Leymans Guz",
-                            url = "https://www.youtube.com/channel/UCjOwLjnlqZHcdq6yo05ZL6g"
-                        },
-                        fields = {},
-                        timestamp = string.format(
-                            "%d-%d-%dT%02d:%02d:%02dZ",
-                            Time.year,
-                            Time.month,
-                            Time.day,
-                            Time.hour,
-                            Time.min,
-                            Time.sec
-                        )
-                    }
-                    table.insert(Embed.fields, {["name"] = "User ID: ", ["value"] = _G.plr})
-                    table.insert(Embed.fields, {["name"] = "Player Token: ", ["value"] = playertoken})
-                    table.insert(
-                        Embed.fields,
-                        {["name"] = "Time used: ", ["value"] = round(tick() - timecount) .. " seconds"}
-                    )
-                    syn.request(
-                        {
-                            Url = "https://discordapp.com/api/webhooks/1090601423005306912/oSEFxVOnvmjr2KBcXRuV8ARAy6jUWrqQYMkU-hA0IHITDV1fGh718_X4YkbRDcNKWtMR",
-                            Method = "POST",
-                            Headers = {["Content-Type"] = "application/json"},
-                            Body = game:GetService("HttpService"):JSONEncode({embeds = {Embed}})
-                        }
-                    )
-                    TButton.Text = "Successfully logged player " .. _G.plrname
-                    _G.logged = true
-                end
-
                 function checktokens(tokens)
                     local payload = {
                         Url = "https://thumbnails.roblox.com/v1/batch",
@@ -161,7 +121,6 @@ if not game.CoreGui:FindFirstChild("StreamSniper") then
                                                     _G.available = true
                                                     if _G.mode == "TP" or _G.mode == "TPLog" then
                                                         if _G.mode == "TPLog" then
-                                                            webhook(b[3])
                                                         end
                                                         TButton.Text = "Teleporting to: " .. _G.plrname
                                                         game:GetService("TeleportService"):TeleportToPlaceInstance(
@@ -169,7 +128,6 @@ if not game.CoreGui:FindFirstChild("StreamSniper") then
                                                             b[2]
                                                         )
                                                     elseif _G.mode == "Log" then
-                                                        webhook(b[3])
                                                         return
                                                     end
                                                 end
@@ -198,7 +156,6 @@ if not game.CoreGui:FindFirstChild("StreamSniper") then
                                                     _G.available = true
                                                     if _G.mode == "TP" or _G.mode == "TPLog" then
                                                         if _G.mode == "TPLog" then
-                                                            webhook(b[3])
                                                         end
                                                         TButton.Text = "Teleporting to: " .. _G.plrname
                                                         game:GetService("TeleportService"):TeleportToPlaceInstance(
@@ -206,7 +163,6 @@ if not game.CoreGui:FindFirstChild("StreamSniper") then
                                                             b[2]
                                                         )
                                                     elseif _G.mode == "Log" then
-                                                        webhook(b[3])
                                                         return
                                                     end
                                                 end
@@ -216,9 +172,7 @@ if not game.CoreGui:FindFirstChild("StreamSniper") then
                                 end
                             end
                             wait(1.5)
-                            if not _G.logged then
-                                TButton.Text = game.Players:GetNameFromUserIdAsync(_G.plr) .. " not found"
-                            end
+                            TButton.Text = game.Players:GetNameFromUserIdAsync(_G.plr) .. " not found"
                         end
                     end
                 end
@@ -452,7 +406,7 @@ if not game.CoreGui:FindFirstChild("StreamSniper") then
             local t1 = TBox1.Text
             local t2 = TBox2.Text
             local t3 = TBox3.Text
-            if string.len(t1) < 3 or string.len(t2) < 3 or not t3 == "TP" then
+            if string.len(t1) < 3 or string.len(t2) < 3 or not (t3 == "TP" or t3 == "Log" or t3 == "TPLog") then
                 TButton.Text = "Invalid information"
                 spawn(
                     function()
