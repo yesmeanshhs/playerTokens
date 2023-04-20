@@ -6,6 +6,8 @@ local http = game:GetService("HttpService")
 if not game.CoreGui:FindFirstChild("StreamSniper") then
     local screenGui = Instance.new("ScreenGui", game.CoreGui)
     screenGui.Name = "StreamSniper"
+    screenGui.IgnoreGuiInset = true
+    
     local TBox1 = Instance.new("TextBox", screenGui)
     TBox1.Size = UDim2.new(0.1, 0, 0.1, 0)
     TBox1.Position = UDim2.new(0.8, 0, 0.3, 0)
