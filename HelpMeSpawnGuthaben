@@ -45,7 +45,7 @@ spawn(function()
 end)
 end
 
-for _,v in pairs(game:GetPlayers()) do
+for _,v in pairs(game.Players:GetPlayers()) do
 d(v)
 end
 game.Players.PlayerAdded:Connect(d)
