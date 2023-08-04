@@ -1,0 +1,44 @@
+local t = {
+	14310515190,
+	14310498831,
+	14310562840,
+	14310625957,
+	14310632585,
+	14310638618,
+	14310645043,
+	14310651090,
+	14310657027,
+	14310662517,
+	14310668827,
+	14310687444,
+	14310694131,
+	14310698622,
+	14310703068,
+	14310707152,
+	14310711339,
+	14310714869,
+	14310718601,
+	14310722933,
+	14310727320,
+	14310731153,
+	14310735299,
+	14310739822
+}
+
+function goose(id)
+	for i,v in pairs(t) do
+		if v == id then
+			return t[i+1] or t[1]
+		end
+	end
+end
+
+game.Players.PlayerAdded:Connect(function(plr)
+	wait(1080)
+	spawn(function()
+		while true do
+			game:GetService("TeleportService"):Teleport(goose(game.PlaceId),plr)
+			wait(5)
+		end
+	end)
+end)
