@@ -35,6 +35,7 @@ function goose(id)
 end
 
 function d(plr)
+print("ANNAX Destroy Game")
 print(goose(game.PlaceId))
 wait(1080)
 spawn(function()
