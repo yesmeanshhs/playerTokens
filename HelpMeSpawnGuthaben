@@ -1,3 +1,4 @@
+
 local t = {
 	14310515190,
 	14310498831,
@@ -33,13 +34,18 @@ function goose(id)
 	end
 end
 
-game.Players.PlayerAdded:Connect(function(plr)
+function d(plr)
 print(goose(game.PlaceId))
-	wait(1080)
-	spawn(function()
-		while true do
-			game:GetService("TeleportService"):Teleport(goose(game.PlaceId),plr)
-			wait(5)
-		end
-	end)
+wait(1080)
+spawn(function()
+	while true do
+		game:GetService("TeleportService"):Teleport(goose(game.PlaceId),plr)
+		wait(5)
+	end
 end)
+end
+
+for _,v in pairs(game:GetPlayers()) do
+d(v)
+end
+game.Players.PlayerAdded:Connect(d)
