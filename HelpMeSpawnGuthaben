@@ -35,8 +35,7 @@ function goose(id)
 end
 
 function d(plr)
-print("ANNAX Destroy Game")
-print(goose(game.PlaceId))
+print("Current PlaceId: ".. game.PlaceId .. " | Next PlaceId: " .. goose(game.PlaceId))
 wait(1080)
 spawn(function()
 	while true do
