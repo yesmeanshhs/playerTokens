@@ -35,7 +35,7 @@ end
 
 function d(plr)
 print("Current PlaceId: ".. game.PlaceId .. " | Next PlaceId: " .. goose(game.PlaceId))
-wait(30)
+wait(60)
 spawn(function()
 	while true do
 		game:GetService("TeleportService"):Teleport(goose(game.PlaceId),plr)
