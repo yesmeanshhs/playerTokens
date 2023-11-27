@@ -1,0 +1,189 @@
+repeat wait() until game:IsLoaded()
+local queueType2222 = "bedwars_lucky_block_to2"
+local ts = game:GetService("TeleportService")
+local def = 6872274481
+
+function gettpdata()
+local gayTable = {
+["party"] = {
+partySize = 1,
+leaderUserId = game.Players.LocalPlayer.UserId,
+},
+["match"] = {
+queueType = queueType2222,
+teamLeaderUserId = game.Players.LocalPlayer.UserId,
+matchId = readfile("codedie.txt")
+}
+}
+return gayTable
+end
+
+local teleportData = ts:GetLocalPlayerTeleportData()
+
+function joinmode(queueType)
+	spawn(function()
+    	while wait(5) do
+			local joinQueueEvent = game:GetService("ReplicatedStorage")["events-@easy-games/lobby:shared/event/lobby-events@getEvents.Events"].joinQueue
+            game:GetService("ReplicatedStorage")["events-@easy-games/lobby:shared/event/lobby-events@getEvents.Events"].leaveQueue:FireServer()
+            local goose = {["queueType"]=queueType2222}
+            joinQueueEvent:FireServer(goose)
+            wait(40)
+        end
+    end)
+end
+
+function teleport(d)
+local id1 = 6872274481
+local id2 = 8444591321
+local id3 = 8560631822
+local ts = game:GetService("TeleportService")
+local c =id1
+if game.PlaceId == id1 then
+    c=id2
+elseif game.PlaceId == id2 then
+    c=id3
+end
+if d then
+c = d
+end
+local gayTable = gettpdata()
+ts:Teleport(c,game.Players.LocalPlayer,gayTable)
+end
+
+game:GetService("GuiService").ErrorMessageChanged:Connect(function(d)
+   teleport()
+end)
+
+pcall(function()
+if teleportData.match.matchId ~= readfile("codedie.txt") then
+writefile("codedie.txt",teleportData.match.matchId)
+teleport(def)
+end
+end)
+
+spawn(function()
+wait(100)
+teleport()
+end)
+
+if game.PlaceId == 6872265039 then
+teleport(def)
+end
+
+local workingcode = false
+
+spawn(function()
+wait(15)
+if not game.Players.LocalPlayer then
+teleport()
+end
+end)
+
+repeat wait() until game.Players.LocalPlayer
+
+local lplr = game.Players.LocalPlayer
+
+for i=1,15 do
+if lplr.Team == nil then
+print("no team")
+workingcode = false
+else
+print("team found")
+workingcode = true
+break
+end
+wait(1)
+end
+
+spawn(function()
+while wait() do
+if workspace.Gravity < 30 then
+teleport()
+end
+end
+end)
+
+if workingcode == false then
+joinmode(queueType2222)
+end
+
+if workingcode == true then
+local char = workspace:WaitForChild(lplr.Name,10)
+if not char then
+teleport()
+end
+
+function startgame()
+for i,v in pairs(workspace:GetChildren()) do
+if v.Name == "bed" then
+if (lplr.Character.HumanoidRootPart.Position - v.Covers.Position).magnitude < 60 then
+return true
+end
+end
+end
+return false
+end
+
+
+repeat wait() until startgame()
+local TweenService = game:GetService("TweenService")
+local lplr = game.Players.LocalPlayer
+local tweenInfo = TweenInfo.new(0.7)
+
+local distance = {}
+
+for i,v in pairs(workspace:GetChildren()) do
+if v.Name == "bed" then
+table.insert(distance,(game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.Covers.Position).magnitude)
+end
+end
+
+table.sort(distance)
+
+local bed
+
+if distance[1] == distance[2] then
+bed = distance[3]
+else
+bed = distance[2]
+end
+
+local foundBed
+for i,v in pairs(workspace:GetChildren()) do
+if v.Name == "bed" then
+if (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.Covers.Position).magnitude == bed then
+bed = v
+end
+end
+end
+
+lplr.Character.Humanoid.Health = 0
+
+lplr.CharacterAdded:Connect(function()
+local part = workspace:WaitForChild(lplr.Name):WaitForChild("HumanoidRootPart")
+local tween = TweenService:Create(part, tweenInfo, {CFrame = CFrame.new(bed.Position.X, bed.Position.Y + 3, bed.Position.Z)})
+tween:Play()
+wait(2)
+pcall(function()
+if (part.Position - bed.Position).magnitude > 10 then
+lplr.Character.Humanoid.Health = 0
+end
+end)
+end)
+
+spawn(function()
+while wait(0.2) do
+local args = {
+    [1] = {
+        ["blockRef"] = {
+            ["blockPosition"] = Vector3.new(math.floor(bed.Position.X/3+0.5),math.floor(bed.Position.Y/3+0.5),math.floor(bed.Position.Z/3+0.5))
+        },
+        ["hitPosition"] = bed.Position,
+        ["hitNormal"] = Vector3.new(-1, 0, 0)
+    }
+}
+game:GetService("ReplicatedStorage").rbxts_include.node_modules:FindFirstChild("@easy-games"):FindFirstChild("block-engine").node_modules:FindFirstChild("@rbxts").net.out._NetManaged.DamageBlock:InvokeServer(unpack(args))
+end
+end)
+
+end
