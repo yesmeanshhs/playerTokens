@@ -21,7 +21,7 @@ if not game.CoreGui:FindFirstChild("StreamSniper") then
 	local TBox1 = Instance.new("TextBox", screenGui)
 	TBox1.Size = UDim2.new(0.1, 0, 0.1, 0)
 	TBox1.Position = UDim2.new(0.8, 0, 0.3, 0)
-	TBox1.Text = ""
+	TBox1.Text = tostring(game.PlaceId)
 	TBox1.PlaceholderColor3 = Color3.new(1, 1, 0)
 	TBox1.TextColor3 = Color3.new(1, 1, 0)
 	TBox1.BackgroundColor3 = Color3.new(0, 0, 0)
